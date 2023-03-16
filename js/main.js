@@ -45,7 +45,6 @@ const getRandomInteger = (a, b) => {
 // Функция получения случайного элемента из массива
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-
 // Функция получения Set'a заданной длинны из случайных целых чисел (Set - массив, содержащий уникальные элементы)
 // на выходе функция дает обычный массив с уникальными значениями
 const getSet = (SetLength) => {
@@ -53,7 +52,7 @@ const getSet = (SetLength) => {
   while (nums.size !== SetLength) {
     nums.add(Math.floor(Math.random() * 100) + 1);
   }
-  const arr = Array.from(nums); // конвертим set в массив
+  const arr = Array.from(nums); // преобразуем set в массив
   return arr;
 };
 
