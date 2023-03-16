@@ -85,3 +85,10 @@ function formFileAddress(stringInput, maxLength, stringAddition) {
     return (stringAdditionPart + stringAdditionFull + stringInput);
   }
 }
+
+export {
+  checkStringLength,
+  checkPolynomial,
+  extractIntPositiveNumber,
+  formFileAddress
+};
