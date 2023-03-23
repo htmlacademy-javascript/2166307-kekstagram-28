@@ -5,10 +5,6 @@ import './upload-master.js';
 import './view-filter.js';
 
 import { createDescriptionArr } from './testdata-generator.js';
+import { renderThumbnails } from './thumbnails.js';
 
-const thumbnailsArr = createDescriptionArr(25);
-
-
-export {
-  thumbnailsArr
-};
+renderThumbnails(createDescriptionArr(25));
