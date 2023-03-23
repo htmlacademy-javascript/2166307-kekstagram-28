@@ -37,7 +37,7 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 const getSet = (setLength) => {
   const nums = new Set();
   while (nums.size !== setLength) {
-    nums.add(Math.floor(Math.random() * 100) + 1);
+    nums.add(Math.floor(Math.random() * (setLength + 100)) + 1);
   }
   const arr = Array.from(nums); // преобразуем set в массив
   return arr;
