@@ -1,10 +1,11 @@
+import {thumbnailsArr} from './main.js';
 
-import { createDescriptionArr } from './testdata-generator.js';
+//console.log(thumbnailsArr);
 
 const thumbnailSection = document.querySelector('.pictures');
 const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const thumbnailsArr = createDescriptionArr(25);
+
 const thumbnailsListFragment = document.createDocumentFragment();
 
 thumbnailsArr.forEach((thumbnail) => {
