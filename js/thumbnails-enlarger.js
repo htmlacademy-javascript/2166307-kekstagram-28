@@ -19,7 +19,7 @@ const onEnlargedTumbnailEscKeydown = (evt) => {
 
 
 //Функция открытия модального окна ('увеличения' кликнутой миниатюры)
-function openThumbnail(evt) {
+function openBigPicture(evt) {
   //фильтруем клики, чтобы срабатывали только на миниатюрах, обернутых в ссылку
   if (evt.target.parentElement.tagName === 'A' && evt.target.parentElement.hasAttributes('data-thumbnail-id')) {
     evt.preventDefault(); //переопределяем поведение ссылки по умолчанию
@@ -42,7 +42,7 @@ function openThumbnail(evt) {
 
 
 // Функция закрытия модального окна
-function closeThumbnail() {
+function closeBigPicture() {
   enlargedThumbnailContainer.classList.add('hidden');
   commentsCounterSection.classList.remove('hidden');
   commentsLoaderSection.classList.remove('hidden');
@@ -56,10 +56,10 @@ function closeThumbnail() {
 
 
 // Функция отрисовки комментариев
-function renderComments(arr) {
+function renderComments(comments) {
   const commentsListFragment = document.createDocumentFragment();
   const commentExample = commentsList.querySelector('.social__comment');
-  arr.forEach((comment) => {
+  comments.forEach((comment) => {
     const commentElement = commentExample.cloneNode(true);
     commentElement.querySelector('.social__picture').src = comment.avatar;
     commentElement.querySelector('.social__picture').alt = comment.name;
@@ -71,6 +71,6 @@ function renderComments(arr) {
 }
 
 export {
-  openThumbnail,
-  closeThumbnail
+  openBigPicture,
+  closeBigPicture
 };
