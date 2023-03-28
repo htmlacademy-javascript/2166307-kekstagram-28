@@ -13,7 +13,7 @@ const commentsList = document.querySelector('.social__comments');
 const onEnlargedTumbnailEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    closeThumbnail();
+    closeBigPicture();
   }
 };
 
@@ -30,7 +30,7 @@ function openBigPicture(evt) {
     enlargedThumbnail.src = evt.target.src; // берем из миниатюры src для увеличенного фото
     enlargedThumbnail.alt = evt.target.alt; // берем из миниатюры alt для увеличенного фото
     // берем из миниатюры колво лайков likes и комментов comments
-    const targetParent = evt.target.parentElement;
+    const targetParent = evt.target.closest('.picture');
     qtyOfLikes.textContent = targetParent.querySelector('.picture__likes').textContent;
     qtyOfComments.textContent = targetParent.querySelector('.picture__comments').textContent;
     enlargedThumbnailDescription.textContent = evt.target.alt; //берем из миниатюры description
