@@ -227,7 +227,9 @@ main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  pointer-events: none;
 }
+
 
 .picture__comments,
 .picture__likes {
