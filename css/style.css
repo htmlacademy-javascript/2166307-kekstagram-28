@@ -624,7 +624,7 @@ main {
   font-size: 0;
 
   background-color: #314359;
-  background-image: url("../img/upload-default-image.jpg");
+  background-image: var(--effects_preview_url, url("../img/upload-default-image.jpg"));
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% auto;
@@ -1409,4 +1409,9 @@ main {
 
 .hidden {
   display: none;
+}
+
+.img-upload__field-wrapper__error {
+color: red;
+background-color: khaki;
 }
