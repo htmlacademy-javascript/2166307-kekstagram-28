@@ -4,8 +4,6 @@ const overlay = document.querySelector('.img-upload__overlay');
 const form = document.querySelector('.img-upload__form');
 const commentInput = document.querySelector('.text__description');
 const hashtagInput = document.querySelector('.text__hashtags');
-const imgPreview = document.querySelector('.img-upload__preview').querySelector('img');
-const imagesEffectsPreview = document.querySelectorAll('.effects__preview');
 const HASHTAG_ERROR_TEXT = 'Неправильно заполнены хэштеги';
 const MAX_HASHTAG_COUNT = 5; // разрешенное количество хэштегов за раз
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -58,14 +56,10 @@ const onEditorEscKeydown = (evt) => {
 
 // Хендлер на открытие редактора
 fileInput.addEventListener('change', openEditor);
-async function openEditor() {
+function openEditor() {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEditorEscKeydown);
-  imgPreview.src = URL.createObjectURL(fileInput.files[0]);
-  imagesEffectsPreview.forEach((image) => {
-    image.style.setProperty('--effects_preview_url', `${'url('}${URL.createObjectURL(fileInput.files[0])}${')'}`);
-  });
 }
 
 // Хендлер на закрытие редактора
@@ -92,4 +86,12 @@ hashtagInput.addEventListener('focus', () => {
 hashtagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', onEditorEscKeydown);
 });
+
+//Хендлер на отправку формы (разрешаем отправку только валидной формы)
+form.addEventListener('submit', validateForm);
+function validateForm(evt) {
+  if (!pristine.validate()) {
+    evt.preventDefault();
+  }
+}
 
