@@ -1410,3 +1410,8 @@ main {
 .hidden {
   display: none;
 }
+
+.img-upload__field-wrapper__error {
+color: red;
+background-color: khaki;
+}
