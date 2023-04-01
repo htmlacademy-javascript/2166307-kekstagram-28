@@ -1,3 +1,6 @@
+import { resetScale } from './photo-effects.js';
+import { resetEffects } from './photo-effects.js';
+
 const fileInput = document.querySelector('#upload-file');
 const closeEditorBtn = document.querySelector('.img-upload__cancel');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -7,6 +10,7 @@ const hashtagInput = document.querySelector('.text__hashtags');
 const HASHTAG_ERROR_TEXT = 'Неправильно заполнены хэштеги';
 const MAX_HASHTAG_COUNT = 5; // разрешенное количество хэштегов за раз
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
+
 
 //Подключаем валидатор Pristine
 const pristine = new Pristine(form, {
@@ -60,6 +64,8 @@ function openEditor() {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEditorEscKeydown);
+  resetScale(); //делаем начальный масштаб 100%
+  resetEffects(); //начальный ээфект = none
 }
 
 // Хендлер на закрытие редактора

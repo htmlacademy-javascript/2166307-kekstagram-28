@@ -1,4 +1,5 @@
 import './form-master.js';
+import './photo-effects.js';
 import { createDescriptionArr } from './testdata-generator.js';
 import { renderThumbnails } from './thumbnails.js';
 import { openBigPicture } from './thumbnails-enlarger.js';
