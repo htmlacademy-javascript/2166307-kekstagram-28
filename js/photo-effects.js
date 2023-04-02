@@ -6,6 +6,10 @@ const SCALE_STEP = 25;
 const SCALE_MAX = 100;
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 const radioContainer = document.querySelector('.effects__list');
+const effectLevelInput = document.querySelector('.effect-level__value');
+let currentSliderValue = 0;
+let currentEffect = [];
+let currentEffectIndex = 0;
 
 const EFFECTS = [
   {
@@ -54,15 +58,17 @@ const EFFECTS = [
     min: 1,
     max: 3,
     step: 0.1,
-    unit: 'p',
+    unit: '',
   },
 ];
+
 
 //Функция отрисовки изображения с заданным масштабом (заодно приводит в соответсвие значение в инпуте)
 const scaleImage = (value) => {
   imgPreview.style.transform = `scale(${value / 100})`;
   scaleInput.value = `${value}%`;
 };
+
 
 //Scale Хендлер на кнопку-минус
 smallerBtn.addEventListener('click', () => {
@@ -73,6 +79,7 @@ smallerBtn.addEventListener('click', () => {
   }
 });
 
+
 //Scale Хендлер на кнопку-плюс
 biggerBtn.addEventListener('click', () => {
   const currentScale = parseInt(scaleInput.value, 10);
@@ -82,7 +89,9 @@ biggerBtn.addEventListener('click', () => {
   }
 });
 
+
 //Функция сброса Scale и Scale-инпут к SCALE_MAX
+// заодно скрывает контейнер слайдера
 function resetScale() {
   imgPreview.style.transform = `scale(${SCALE_MAX / 100})`;
   scaleInput.value = `${SCALE_MAX}%`;
@@ -92,18 +101,31 @@ function resetScale() {
 
 //Хендлер на радио кнопки с эффектами
 radioContainer.addEventListener('change', onRadioChange);
+
+
+//Функция дает hidden, если none эффект + дает изображению класс соответсвующий выбранному эффекту
+// + вызывает перенастройщик слайдера
+// + вызывает добавлялку style в соответствии с выбранным эффектом
 function onRadioChange(evt) {
-  sliderContainer.classList.remove('hidden');
-  const currentEffect = evt.target.id.split('-');
+  currentEffect = evt.target.id.split('-');
+  if (currentEffect[1] === 'none') {
+    sliderContainer.classList.add('hidden');
+  } else {
+    sliderContainer.classList.remove('hidden');
+  }
   imgPreview.className = 'img-upload__preview';
   imgPreview.classList.add(`${'effects__preview--'}${currentEffect[1]}`);
   updateSliderSettings(currentEffect[1]);
+  updateImageStyle(currentEffect[1]);
 }
+
 
 //Функция сброса эффекта на none
 function resetEffects() {
   imgPreview.className = 'img-upload__preview effects__preview--none';
+  imgPreview.style.filter = 'none';
 }
+
 
 //Начальная инициализация noUiSlider
 noUiSlider.create(sliderContainer, {
@@ -116,9 +138,10 @@ noUiSlider.create(sliderContainer, {
   connect: 'lower',
 });
 
+
+//Функция перенастройки слайдера в соотв. с выбранным эффектом
 function updateSliderSettings(effect) {
-  const currentEffectIndex = EFFECTS.findIndex((type) => type.name === `${effect}`);
-  console.log(currentEffectIndex);
+  currentEffectIndex = EFFECTS.findIndex((type) => type.name === `${effect}`);
   sliderContainer.noUiSlider.updateOptions({
     range: {
       min: EFFECTS[currentEffectIndex].min,
@@ -129,15 +152,25 @@ function updateSliderSettings(effect) {
   });
 }
 
-// function updateImgStyle(effect) {
-//   sliderContainer.noUiSlider.updateOptions({
-//     range: {
-//       min: 0,
-//       max: 100,
-//     },
-//     step: 1,
-//   });
-// }
+
+//Функция добавляления к изображению style в соответствии с выбранным эффектом и его уровнем
+function updateImageStyle(effect) {
+  currentEffectIndex = EFFECTS.findIndex((type) => type.name === `${effect}`);
+  if (currentEffect[1] === 'none') {
+    imgPreview.style.filter = 'none';
+  } else {
+    imgPreview.style.filter = `${EFFECTS[currentEffectIndex].style}${'('}${currentSliderValue}${EFFECTS[currentEffectIndex].unit}${')'}`;
+  }
+}
+
+
+// Хендлер на бегунок слайдера с функцией, передающей значение слайдера в input с уровнем эффекта
+// и в style изображения
+sliderContainer.noUiSlider.on('update', () => {
+  effectLevelInput.value = sliderContainer.noUiSlider.get();
+  currentSliderValue = sliderContainer.noUiSlider.get();
+  imgPreview.style.filter = imgPreview.style.filter.replace(/ *\([^)]*\) */g, `${'('}${sliderContainer.noUiSlider.get()}${EFFECTS[currentEffectIndex].unit}${')'}`);
+});
 
 
 export {
