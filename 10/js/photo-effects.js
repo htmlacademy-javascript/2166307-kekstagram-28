@@ -1,16 +1,5 @@
-const smallerBtn = document.querySelector('.scale__control--smaller');
-const biggerBtn = document.querySelector('.scale__control--bigger');
-const scaleInput = document.querySelector('.scale__control--value');
-const imgPreview = document.querySelector('.img-upload__preview');
 const SCALE_STEP = 25;
 const SCALE_MAX = 100;
-const sliderContainer = document.querySelector('.img-upload__effect-level');
-const radioContainer = document.querySelector('.effects__list');
-const effectLevelInput = document.querySelector('.effect-level__value');
-let currentSliderValue = 0;
-let currentEffect = [];
-let currentEffectIndex = 0;
-
 const EFFECTS = [
   {
     name: 'none',
@@ -62,6 +51,18 @@ const EFFECTS = [
   },
 ];
 
+const smallerBtn = document.querySelector('.scale__control--smaller');
+const biggerBtn = document.querySelector('.scale__control--bigger');
+const scaleInput = document.querySelector('.scale__control--value');
+const imgPreview = document.querySelector('.img-upload__preview');
+const sliderContainer = document.querySelector('.effect-level__slider');
+const radioContainer = document.querySelector('.effects__list');
+const sliderFieldset = document.querySelector('.img-upload__effect-level');
+const effectLevelInput = document.querySelector('.effect-level__value');
+let currentSliderValue = 0;
+let currentEffects = [];
+let currentEffectIndex = 0;
+
 
 //Функция отрисовки изображения с заданным масштабом (заодно приводит в соответсвие значение в инпуте)
 const scaleImage = (value) => {
@@ -70,60 +71,20 @@ const scaleImage = (value) => {
 };
 
 
-//Scale Хендлер на кнопку-минус
-smallerBtn.addEventListener('click', () => {
-  const currentScale = parseInt(scaleInput.value, 10);
-  if (currentScale > SCALE_STEP) {
-    const newScale = currentScale - SCALE_STEP;
-    scaleImage(newScale);
-  }
-});
-
-
-//Scale Хендлер на кнопку-плюс
-biggerBtn.addEventListener('click', () => {
-  const currentScale = parseInt(scaleInput.value, 10);
-  if (currentScale < SCALE_MAX) {
-    const newScale = currentScale + SCALE_STEP;
-    scaleImage(newScale);
-  }
-});
-
-
-//Функция сброса Scale и Scale-инпут к SCALE_MAX
-// заодно скрывает контейнер слайдера
-function resetScale() {
-  imgPreview.style.transform = `scale(${SCALE_MAX / 100})`;
-  scaleInput.value = `${SCALE_MAX}%`;
-  sliderContainer.classList.add('hidden');
-}
-
-
-//Хендлер на радио кнопки с эффектами
-radioContainer.addEventListener('change', onRadioChange);
-
-
 //Функция дает hidden, если none эффект + дает изображению класс соответсвующий выбранному эффекту
 // + вызывает перенастройщик слайдера
 // + вызывает добавлялку style в соответствии с выбранным эффектом
 function onRadioChange(evt) {
-  currentEffect = evt.target.id.split('-');
-  if (currentEffect[1] === 'none') {
-    sliderContainer.classList.add('hidden');
+  currentEffects = evt.target.id.split('-');
+  if (currentEffects[1] === 'none') {
+    sliderFieldset.classList.add('hidden');
   } else {
-    sliderContainer.classList.remove('hidden');
+    sliderFieldset.classList.remove('hidden');
   }
   imgPreview.className = 'img-upload__preview';
-  imgPreview.classList.add(`${'effects__preview--'}${currentEffect[1]}`);
-  updateSliderSettings(currentEffect[1]);
-  updateImageStyle(currentEffect[1]);
-}
-
-
-//Функция сброса эффекта на none
-function resetEffects() {
-  imgPreview.className = 'img-upload__preview effects__preview--none';
-  imgPreview.style.filter = 'none';
+  imgPreview.classList.add(`${'effects__preview--'}${currentEffects[1]}`);
+  updateSliderSettings(currentEffects[1]);
+  updateImageStyle(currentEffects[1]);
 }
 
 
@@ -156,12 +117,35 @@ function updateSliderSettings(effect) {
 //Функция добавляления к изображению style в соответствии с выбранным эффектом и его уровнем
 function updateImageStyle(effect) {
   currentEffectIndex = EFFECTS.findIndex((type) => type.name === `${effect}`);
-  if (currentEffect[1] === 'none') {
+  if (currentEffects[1] === 'none') {
     imgPreview.style.filter = 'none';
   } else {
     imgPreview.style.filter = `${EFFECTS[currentEffectIndex].style}${'('}${currentSliderValue}${EFFECTS[currentEffectIndex].unit}${')'}`;
   }
 }
+
+//Хендлер на радио кнопки с эффектами
+radioContainer.addEventListener('change', onRadioChange);
+
+
+//Scale Хендлер на кнопку-минус
+smallerBtn.addEventListener('click', () => {
+  const currentScale = parseInt(scaleInput.value, 10);
+  if (currentScale > SCALE_STEP) {
+    const newScale = currentScale - SCALE_STEP;
+    scaleImage(newScale);
+  }
+});
+
+
+//Scale Хендлер на кнопку-плюс
+biggerBtn.addEventListener('click', () => {
+  const currentScale = parseInt(scaleInput.value, 10);
+  if (currentScale < SCALE_MAX) {
+    const newScale = currentScale + SCALE_STEP;
+    scaleImage(newScale);
+  }
+});
 
 
 // Хендлер на бегунок слайдера с функцией, передающей значение слайдера в input с уровнем эффекта
@@ -172,6 +156,19 @@ sliderContainer.noUiSlider.on('update', () => {
   imgPreview.style.filter = imgPreview.style.filter.replace(/ *\([^)]*\) */g, `${'('}${sliderContainer.noUiSlider.get()}${EFFECTS[currentEffectIndex].unit}${')'}`);
 });
 
+//Функция сброса эффекта на none
+function resetEffects() {
+  imgPreview.className = 'img-upload__preview effects__preview--none';
+  imgPreview.style.filter = 'none';
+}
+
+//Функция сброса Scale и Scale-инпут к SCALE_MAX
+// заодно скрывает контейнер слайдера
+function resetScale() {
+  imgPreview.style.transform = `scale(${SCALE_MAX / 100})`;
+  scaleInput.value = `${SCALE_MAX}%`;
+  sliderFieldset.classList.add('hidden');
+}
 
 export {
   resetScale,
