@@ -1,3 +1,9 @@
+import { onEditorEscKeydown } from './form-master.js';
+
+const confirmationTemplate = document.querySelector('#success').content.querySelector('.success');
+const confirmationElement = confirmationTemplate.cloneNode(true);
+const mistakeTemplate = document.querySelector('#error').content.querySelector('.error');
+const mistakeElement = mistakeTemplate.cloneNode(true);
 const BASE_URL = 'https://28.javascript.pages.academy/kekstagram';
 const Route = {
   GET_DATA: '/data',
@@ -7,6 +13,45 @@ const ErrorText = {
   GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу через 5 секунд',
   SEND_DATA: 'Не удалось отправить форму. Попробуйте повторить отправку позже',
 };
+
+
+// Функция показа подтверждения успешной отправки фотографии на сервер
+function showConfirmation() {
+  document.body.appendChild(confirmationElement);
+}
+
+// Функция показа ошибки отправки фотографии на сервер
+function showMistake() {
+  document.body.appendChild(mistakeElement);
+}
+
+
+//Функция нажатия на Esc/ на кнопку ОК/ на пространство вне сообщения при появившемся подтверждении отправки
+const onConfirmationMessageEvent = (evt) => {
+  const confirmationMessage = document.querySelector('.success__inner');
+  const successButton = confirmationMessage.querySelector('.success__button');
+  if (evt.key === 'Escape' || !confirmationMessage.contains(evt.target) || successButton.contains(evt.target)) {
+    evt.preventDefault();
+    confirmationElement.remove();
+    document.addEventListener('keydown', onEditorEscKeydown);
+    document.removeEventListener('keydown', onConfirmationMessageEvent);
+    document.removeEventListener('mouseup', onConfirmationMessageEvent);
+  }
+};
+
+//Функция нажатия на Esc/ на кнопку ОК/ на пространство вне сообщения при появившемся сообщении об ошибке
+const onMistakeMessageEvent = (evt) => {
+  const mistakeMessage = document.querySelector('.error__inner');
+  const mistakeButton = mistakeMessage.querySelector('.error__button');
+  if (evt.key === 'Escape' || !mistakeMessage.contains(evt.target) || mistakeButton.contains(evt.target)) {
+    evt.preventDefault();
+    mistakeElement.remove();
+    document.addEventListener('keydown', onEditorEscKeydown);
+    document.removeEventListener('keydown', onMistakeMessageEvent);
+    document.removeEventListener('mouseup', onMistakeMessageEvent);
+  }
+};
+
 
 const getData = () => fetch(
   `${BASE_URL}${Route.GET_DATA}`)
@@ -28,7 +73,16 @@ const sendData = (body) => fetch(
   })
   .then((response) => {
     if (!response.ok) {
+      showMistake();
+      document.removeEventListener('keydown', onEditorEscKeydown);
+      document.addEventListener('keydown', onMistakeMessageEvent);
+      document.addEventListener('mouseup', onMistakeMessageEvent);
       throw new Error();
+    } else {
+      showConfirmation();
+      document.removeEventListener('keydown', onEditorEscKeydown);
+      document.addEventListener('keydown', onConfirmationMessageEvent);
+      document.addEventListener('mouseup', onConfirmationMessageEvent);
     }
   })
   .catch(() => {
@@ -37,5 +91,7 @@ const sendData = (body) => fetch(
 
 export {
   getData,
-  sendData
+  sendData,
+  onMistakeMessageEvent,
+  onConfirmationMessageEvent
 };
