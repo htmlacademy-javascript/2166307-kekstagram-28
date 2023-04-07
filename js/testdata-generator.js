@@ -5,7 +5,7 @@ import { getRandomArrayElement } from './utils.js';
 import { getSet } from './utils.js';
 
 // Initial test-data settings
-const PHOTO_DESCRIPTIONS_COUNT = 26;
+const PHOTO_DESCRIPTIONS_COUNT = 25;
 const ID_RANGE = [1, PHOTO_DESCRIPTIONS_COUNT];
 const URL_RANGE = [1, PHOTO_DESCRIPTIONS_COUNT];
 const LIKES_RANGE = [15, 200];

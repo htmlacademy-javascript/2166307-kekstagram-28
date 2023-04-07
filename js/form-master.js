@@ -1,5 +1,7 @@
 import { resetScale } from './photo-effects.js';
 import { resetEffects } from './photo-effects.js';
+import { showAlert } from './utils.js';
+import { sendData } from './network-utils.js';
 
 const fileInput = document.querySelector('#upload-file');
 const closeEditorBtn = document.querySelector('.img-upload__cancel');
@@ -11,13 +13,13 @@ const HASHTAG_ERROR_TEXT = 'Неправильно заполнены хэште
 const MAX_HASHTAG_COUNT = 5; // разрешенное количество хэштегов за раз
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 
-
 //Подключаем валидатор Pristine
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper__error'
 });
+
 
 //Функция проверки количества введенных хэштегов
 const hasValidCount = (tags) => tags.length <= MAX_HASHTAG_COUNT;
@@ -58,6 +60,24 @@ const onEditorEscKeydown = (evt) => {
 };
 
 
+// Блокируем закрытие редактора по Esc в процессе ввода коммента или хэштега
+commentInput.addEventListener('focus', () => {
+  document.removeEventListener('keydown', onEditorEscKeydown);
+});
+
+commentInput.addEventListener('blur', () => {
+  document.addEventListener('keydown', onEditorEscKeydown);
+});
+
+hashtagInput.addEventListener('focus', () => {
+  document.removeEventListener('keydown', onEditorEscKeydown);
+});
+
+hashtagInput.addEventListener('blur', () => {
+  document.addEventListener('keydown', onEditorEscKeydown);
+});
+
+
 // Хендлер на открытие редактора
 fileInput.addEventListener('change', openEditor);
 function openEditor() {
@@ -76,28 +96,27 @@ function closeEditor() {
   document.removeEventListener('keydown', onEditorEscKeydown);
 }
 
-// Блокируем закрытие редактора по Esc в процессе ввода коммента или хэштега
-commentInput.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onEditorEscKeydown);
-});
-
-commentInput.addEventListener('blur', () => {
-  document.addEventListener('keydown', onEditorEscKeydown);
-});
-
-hashtagInput.addEventListener('focus', () => {
-  document.removeEventListener('keydown', onEditorEscKeydown);
-});
-
-hashtagInput.addEventListener('blur', () => {
-  document.addEventListener('keydown', onEditorEscKeydown);
-});
-
-//Хендлер на отправку формы (разрешаем отправку только валидной формы)
-form.addEventListener('submit', validateForm);
-function validateForm(evt) {
-  if (!pristine.validate()) {
+// Хендлер на откправку формы
+const setUserFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-}
+    const isValid = pristine.validate();
+    if (isValid) {
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(
+          (err) => {
+            showAlert(err.message);
+          }
+        );
+    }
+  });
+};
+
+
+export {
+  setUserFormSubmit,
+  openEditor,
+  closeEditor
+};
 
