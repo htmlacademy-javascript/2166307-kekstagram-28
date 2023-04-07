@@ -1,7 +1,3 @@
-const ALERT_SHOW_TIME = 5000; // в милли секундах
-const submitButton = document.querySelector('.img-upload__submit');
-const alertContainer = document.createElement('div');
-
 // функция перетасовки случайным образом порядка элементов в заданном диапазоне при помощи алгоритма Фишера-Йетса,
 // возвращает перемешанный  массив
 const shuffleRange = (a, b) => {
@@ -46,44 +42,21 @@ const getSet = (setLength) => {
   return arr;
 };
 
-//Функция блокировки кнопки submit после отправки
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-};
+// //Функция блокировки кнопки submit после отправки
+// const blockSubmitButton = () => {
+//   submitButton.disabled = true;
+// };
 
-//Функция разблокировки кнопки submit после отправки
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  alertContainer.remove();
-};
-
-const showAlert = (message) => {
-  //const form = document.querySelector('img-upload__form');
-  alertContainer.style.zIndex = '100';
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = '0';
-  alertContainer.style.top = '0';
-  alertContainer.style.right = '0';
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '20px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'yellow';
-  alertContainer.style.color = 'red';
-  alertContainer.classList.add = 'alert__container';
-  alertContainer.textContent = message;
-  document.body.append(alertContainer);
-  blockSubmitButton();
-
-  setTimeout(() => {
-    unblockSubmitButton();
-  }, ALERT_SHOW_TIME);
-};
+// //Функция разблокировки кнопки submit после отправки
+// const unblockSubmitButton = () => {
+//   submitButton.disabled = false;
+//   alertContainer.remove();
+// };
 
 
 export {
   shuffleRange,
   getRandomInteger,
   getRandomArrayElement,
-  getSet,
-  showAlert
+  getSet
 };

@@ -3,6 +3,7 @@ import { resetEffects } from './photo-effects.js';
 import { showAlert } from './utils.js';
 import { sendData } from './network-utils.js';
 
+
 const fileInput = document.querySelector('#upload-file');
 const closeEditorBtn = document.querySelector('.img-upload__cancel');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -79,13 +80,14 @@ hashtagInput.addEventListener('blur', () => {
 
 
 // Хендлер на открытие редактора
-fileInput.addEventListener('change', openEditor);
+fileInput.addEventListener('input', openEditor);
 function openEditor() {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEditorEscKeydown);
   resetScale(); //делаем начальный масштаб 100%
   resetEffects(); //начальный ээфект = none
+  //form.reset();
 }
 
 // Хендлер на закрытие редактора
@@ -94,9 +96,10 @@ function closeEditor() {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onEditorEscKeydown);
+  form.reset();
 }
 
-// Хендлер на откправку формы
+//Хендлер на отправку формы
 const setUserFormSubmit = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -117,6 +120,7 @@ const setUserFormSubmit = (onSuccess) => {
 export {
   setUserFormSubmit,
   openEditor,
-  closeEditor
+  closeEditor,
+  onEditorEscKeydown
 };
 
