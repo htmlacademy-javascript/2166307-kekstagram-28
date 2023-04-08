@@ -1,17 +1,12 @@
 import './form-master.js';
 import './photo-effects.js';
-//import { createDescriptionArr } from './testdata-generator.js';
 import { renderThumbnails } from './thumbnails.js';
-import { openBigPicture } from './thumbnails-enlarger.js';
-import { closeBigPicture } from './thumbnails-enlarger.js';
+import { openBigPicture, closeBigPicture } from './thumbnails-enlarger.js';
 import { getData } from './network-utils.js';
-import {showAlert} from './utils.js';
-import {setUserFormSubmit} from './form-master.js';
-import {closeEditor} from './form-master.js';
-let thumbnails = [];
+import { showAlert } from './utils.js';
+import { setUserFormSubmit, closeEditor } from './form-master.js';
 
-// // генерируем тестовые данные
-// const thumbnails = createDescriptionArr(26);
+let thumbnails = [];
 
 //хендлер на открытие модального окна по клику на миниатюре (вешаем на секцию)
 const thumbnailsSection = document.querySelector('.pictures');
@@ -24,7 +19,7 @@ closeElement.addEventListener('click', closeBigPicture);
 getData()
   .then((photos) => {
     thumbnails = photos;
-    renderThumbnails(thumbnails);
+    renderThumbnails(photos);
   })
   .catch(
     (err) => {

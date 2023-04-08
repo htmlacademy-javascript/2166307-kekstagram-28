@@ -14,7 +14,6 @@ const ErrorText = {
   SEND_DATA: 'Не удалось отправить форму. Попробуйте повторить отправку через 5 секунд',
 };
 
-
 // Функция показа подтверждения успешной отправки фотографии на сервер
 function showConfirmation() {
   document.body.appendChild(confirmationElement);
@@ -24,7 +23,6 @@ function showConfirmation() {
 function showMistake() {
   document.body.appendChild(mistakeElement);
 }
-
 
 //Функция нажатия на Esc/ на кнопку ОК/ на пространство вне сообщения при появившемся подтверждении отправки
 const onConfirmationMessageEvent = (evt) => {
@@ -52,7 +50,7 @@ const onMistakeMessageEvent = (evt) => {
   }
 };
 
-
+//Функция получения данных от сервера
 const getData = () => fetch(
   `${BASE_URL}${Route.GET_DATA}`)
   .then((response) => {
@@ -65,6 +63,7 @@ const getData = () => fetch(
     throw new Error(ErrorText.GET_DATA);
   });
 
+//Функция отправки данных на сервер
 const sendData = (body) => fetch(
   `${BASE_URL}${Route.SEND_DATA}`,
   {
@@ -88,6 +87,7 @@ const sendData = (body) => fetch(
   .catch(() => {
     throw new Error(ErrorText.SEND_DATA);
   });
+
 
 export {
   getData,
