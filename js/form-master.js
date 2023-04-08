@@ -1,8 +1,6 @@
-import { resetScale } from './photo-effects.js';
-import { resetEffects } from './photo-effects.js';
+import { resetScale, resetEffects } from './photo-effects.js';
 import { showAlert } from './utils.js';
 import { sendData } from './network-utils.js';
-
 
 const fileInput = document.querySelector('#upload-file');
 const closeEditorBtn = document.querySelector('.img-upload__cancel');
@@ -20,7 +18,6 @@ const pristine = new Pristine(form, {
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper__error'
 });
-
 
 //Функция проверки количества введенных хэштегов
 const hasValidCount = (tags) => tags.length <= MAX_HASHTAG_COUNT;
@@ -50,7 +47,6 @@ pristine.addValidator(
   HASHTAG_ERROR_TEXT
 );
 
-
 //Функция закрытия эдитора по нажатию Esc
 const onEditorEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
@@ -59,7 +55,6 @@ const onEditorEscKeydown = (evt) => {
     closeEditor();
   }
 };
-
 
 // Блокируем закрытие редактора по Esc в процессе ввода коммента или хэштега
 commentInput.addEventListener('focus', () => {
@@ -77,7 +72,6 @@ hashtagInput.addEventListener('focus', () => {
 hashtagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', onEditorEscKeydown);
 });
-
 
 // Хендлер на открытие редактора
 fileInput.addEventListener('input', openEditor);
