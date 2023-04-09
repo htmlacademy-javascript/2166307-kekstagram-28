@@ -58,7 +58,6 @@ const unblockSubmitButton = () => {
 };
 
 const showAlert = (message) => {
-  //const form = document.querySelector('img-upload__form');
   alertContainer.style.zIndex = '100';
   alertContainer.style.position = 'absolute';
   alertContainer.style.left = '0';
@@ -73,7 +72,6 @@ const showAlert = (message) => {
   alertContainer.textContent = message;
   document.body.append(alertContainer);
   blockSubmitButton();
-
   setTimeout(() => {
     unblockSubmitButton();
   }, ALERT_SHOW_TIME);
@@ -85,5 +83,8 @@ export {
   getRandomInteger,
   getRandomArrayElement,
   getSet,
-  showAlert
+  showAlert,
+  blockSubmitButton,
+  unblockSubmitButton,
+  ALERT_SHOW_TIME
 };

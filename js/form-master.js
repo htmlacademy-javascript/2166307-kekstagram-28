@@ -1,5 +1,5 @@
 import { resetScale, resetEffects } from './photo-effects.js';
-import { showAlert } from './utils.js';
+import { blockSubmitButton, unblockSubmitButton, ALERT_SHOW_TIME } from './utils.js';
 import { sendData } from './network-utils.js';
 
 const fileInput = document.querySelector('#upload-file');
@@ -81,7 +81,6 @@ function openEditor() {
   document.addEventListener('keydown', onEditorEscKeydown);
   resetScale(); //делаем начальный масштаб 100%
   resetEffects(); //начальный ээфект = none
-  //form.reset();
 }
 
 // Хендлер на закрытие редактора
@@ -90,6 +89,7 @@ function closeEditor() {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onEditorEscKeydown);
+  unblockSubmitButton();
   form.reset();
 }
 
@@ -99,11 +99,15 @@ const setUserFormSubmit = (onSuccess) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
+      blockSubmitButton();
       sendData(new FormData(evt.target))
         .then(onSuccess)
         .catch(
-          (err) => {
-            showAlert(err.message);
+          () => {
+            blockSubmitButton();
+            setTimeout(() => {
+              unblockSubmitButton();
+            }, ALERT_SHOW_TIME);
           }
         );
     }
