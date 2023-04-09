@@ -59,17 +59,16 @@ const sliderContainer = document.querySelector('.effect-level__slider');
 const radioContainer = document.querySelector('.effects__list');
 const sliderFieldset = document.querySelector('.img-upload__effect-level');
 const effectLevelInput = document.querySelector('.effect-level__value');
+
 let currentSliderValue = 0;
 let currentEffects = [];
 let currentEffectIndex = 0;
-
 
 //Функция отрисовки изображения с заданным масштабом (заодно приводит в соответсвие значение в инпуте)
 const scaleImage = (value) => {
   imgPreview.style.transform = `scale(${value / 100})`;
   scaleInput.value = `${value}%`;
 };
-
 
 //Функция дает hidden, если none эффект + дает изображению класс соответсвующий выбранному эффекту
 // + вызывает перенастройщик слайдера
@@ -87,7 +86,6 @@ function onRadioChange(evt) {
   updateImageStyle(currentEffects[1]);
 }
 
-
 //Начальная инициализация noUiSlider
 noUiSlider.create(sliderContainer, {
   range: {
@@ -98,7 +96,6 @@ noUiSlider.create(sliderContainer, {
   step: EFFECTS[0].step,
   connect: 'lower',
 });
-
 
 //Функция перенастройки слайдера в соотв. с выбранным эффектом
 function updateSliderSettings(effect) {
@@ -113,7 +110,6 @@ function updateSliderSettings(effect) {
   });
 }
 
-
 //Функция добавляления к изображению style в соответствии с выбранным эффектом и его уровнем
 function updateImageStyle(effect) {
   currentEffectIndex = EFFECTS.findIndex((type) => type.name === `${effect}`);
@@ -124,9 +120,10 @@ function updateImageStyle(effect) {
   }
 }
 
-//Хендлер на радио кнопки с эффектами
-radioContainer.addEventListener('change', onRadioChange);
-
+//Функция установки хендлера на радио кнопки с эффектами
+function setOnRadioContainerListener() {
+  radioContainer.addEventListener('change', onRadioChange);
+}
 
 //Scale Хендлер на кнопку-минус
 smallerBtn.addEventListener('click', () => {
@@ -137,7 +134,6 @@ smallerBtn.addEventListener('click', () => {
   }
 });
 
-
 //Scale Хендлер на кнопку-плюс
 biggerBtn.addEventListener('click', () => {
   const currentScale = parseInt(scaleInput.value, 10);
@@ -146,7 +142,6 @@ biggerBtn.addEventListener('click', () => {
     scaleImage(newScale);
   }
 });
-
 
 // Хендлер на бегунок слайдера с функцией, передающей значение слайдера в input с уровнем эффекта
 // и в style изображения
@@ -170,7 +165,9 @@ function resetScale() {
   sliderFieldset.classList.add('hidden');
 }
 
+
 export {
   resetScale,
-  resetEffects
+  resetEffects,
+  setOnRadioContainerListener
 };

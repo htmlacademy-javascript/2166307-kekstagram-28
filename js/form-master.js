@@ -1,5 +1,6 @@
-import { resetScale } from './photo-effects.js';
-import { resetEffects } from './photo-effects.js';
+import { resetScale, resetEffects } from './photo-effects.js';
+import { blockSubmitButton, unblockSubmitButton, ALERT_SHOW_TIME } from './utils.js';
+import { sendData } from './network-utils.js';
 
 const fileInput = document.querySelector('#upload-file');
 const closeEditorBtn = document.querySelector('.img-upload__cancel');
@@ -10,7 +11,6 @@ const hashtagInput = document.querySelector('.text__hashtags');
 const HASHTAG_ERROR_TEXT = 'Неправильно заполнены хэштеги';
 const MAX_HASHTAG_COUNT = 5; // разрешенное количество хэштегов за раз
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
-
 
 //Подключаем валидатор Pristine
 const pristine = new Pristine(form, {
@@ -47,7 +47,6 @@ pristine.addValidator(
   HASHTAG_ERROR_TEXT
 );
 
-
 //Функция закрытия эдитора по нажатию Esc
 const onEditorEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
@@ -56,25 +55,6 @@ const onEditorEscKeydown = (evt) => {
     closeEditor();
   }
 };
-
-
-// Хендлер на открытие редактора
-fileInput.addEventListener('change', openEditor);
-function openEditor() {
-  overlay.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onEditorEscKeydown);
-  resetScale(); //делаем начальный масштаб 100%
-  resetEffects(); //начальный ээфект = none
-}
-
-// Хендлер на закрытие редактора
-closeEditorBtn.addEventListener('click', closeEditor);
-function closeEditor() {
-  overlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onEditorEscKeydown);
-}
 
 // Блокируем закрытие редактора по Esc в процессе ввода коммента или хэштега
 commentInput.addEventListener('focus', () => {
@@ -93,11 +73,52 @@ hashtagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', onEditorEscKeydown);
 });
 
-//Хендлер на отправку формы (разрешаем отправку только валидной формы)
-form.addEventListener('submit', validateForm);
-function validateForm(evt) {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
+// Хендлер на открытие редактора
+fileInput.addEventListener('input', openEditor);
+function openEditor() {
+  overlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onEditorEscKeydown);
+  resetScale(); //делаем начальный масштаб 100%
+  resetEffects(); //начальный ээфект = none
 }
+
+// Хендлер на закрытие редактора
+closeEditorBtn.addEventListener('click', closeEditor);
+function closeEditor() {
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onEditorEscKeydown);
+  unblockSubmitButton();
+  form.reset();
+}
+
+//Хендлер на отправку формы
+const setUserFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(
+          () => {
+            blockSubmitButton();
+            setTimeout(() => {
+              unblockSubmitButton();
+            }, ALERT_SHOW_TIME);
+          }
+        );
+    }
+  });
+};
+
+
+export {
+  setUserFormSubmit,
+  openEditor,
+  closeEditor,
+  onEditorEscKeydown
+};
 
