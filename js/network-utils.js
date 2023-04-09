@@ -85,6 +85,10 @@ const sendData = (body) => fetch(
     }
   })
   .catch(() => {
+    showMistake();
+    document.removeEventListener('keydown', onEditorEscKeydown);
+    document.addEventListener('keydown', onMistakeMessageEvent);
+    document.addEventListener('mouseup', onMistakeMessageEvent);
     throw new Error(ErrorText.SEND_DATA);
   });
 

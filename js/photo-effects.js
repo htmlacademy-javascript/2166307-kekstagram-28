@@ -59,6 +59,7 @@ const sliderContainer = document.querySelector('.effect-level__slider');
 const radioContainer = document.querySelector('.effects__list');
 const sliderFieldset = document.querySelector('.img-upload__effect-level');
 const effectLevelInput = document.querySelector('.effect-level__value');
+
 let currentSliderValue = 0;
 let currentEffects = [];
 let currentEffectIndex = 0;
@@ -119,8 +120,10 @@ function updateImageStyle(effect) {
   }
 }
 
-//Хендлер на радио кнопки с эффектами
-radioContainer.addEventListener('change', onRadioChange);
+//Функция установки хендлера на радио кнопки с эффектами
+function setOnRadioContainerListener() {
+  radioContainer.addEventListener('change', onRadioChange);
+}
 
 //Scale Хендлер на кнопку-минус
 smallerBtn.addEventListener('click', () => {
@@ -165,5 +168,6 @@ function resetScale() {
 
 export {
   resetScale,
-  resetEffects
+  resetEffects,
+  setOnRadioContainerListener
 };

@@ -1,7 +1,5 @@
 import { thumbnails } from './main.js';
 
-let commentsVolume = 5;
-let comments = [];
 const showMoreBtn = document.querySelector('.comments-loader');
 const enlargedThumbnailContainer = document.querySelector('.big-picture');
 const enlargedThumbnail = enlargedThumbnailContainer.querySelector('.big-picture__img').querySelector('img');
@@ -10,6 +8,9 @@ const qtyOfLikes = enlargedThumbnailContainer.querySelector('.likes-count');
 const qtyOfComments = enlargedThumbnailContainer.querySelector('.comments-count');
 const commentsList = document.querySelector('.social__comments');
 
+let commentsVolume = 5;
+let comments = [];
+
 //Функция нажатия на Esc на увеличенной миниатюре
 const onEnlargedTumbnailEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
@@ -17,7 +18,6 @@ const onEnlargedTumbnailEscKeydown = (evt) => {
     closeBigPicture();
   }
 };
-
 
 //Функция открытия модального окна ('увеличения' кликнутой миниатюры)
 function openBigPicture(evt) {
@@ -39,7 +39,6 @@ function openBigPicture(evt) {
     document.addEventListener('keydown', onEnlargedTumbnailEscKeydown); //вешаем хендлер на закрытие модального по нажатию на  Esc
   }
 }
-
 
 // Функция закрытия модального окна
 function closeBigPicture() {
