@@ -97,7 +97,19 @@ function showMoreComments() {
   renderComments(comments);
 }
 
+//Функция ставит хендлер на открытие модального окна по клику на миниатюре (вешаем на секцию)
+function onPictureContainerClick() {
+  const thumbnailsSection = document.querySelector('.pictures');
+  thumbnailsSection.addEventListener('click', openBigPicture);
+}
+
+//Функция ставит хендлер на закрытие модального окна по клику мышкой на крестик
+function onCloseButtonClick() {
+  const closeElement = document.querySelector('.big-picture__cancel');
+  closeElement.addEventListener('click', closeBigPicture);
+}
+
 export {
-  openBigPicture,
-  closeBigPicture
+  onPictureContainerClick,
+  onCloseButtonClick
 };
