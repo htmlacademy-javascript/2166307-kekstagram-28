@@ -8,6 +8,9 @@ const overlay = document.querySelector('.img-upload__overlay');
 const form = document.querySelector('.img-upload__form');
 const commentInput = document.querySelector('.text__description');
 const hashtagInput = document.querySelector('.text__hashtags');
+const imgPreview = document.querySelector('.img-upload__preview').querySelector('img');
+const imagesEffectsPreview = document.querySelectorAll('.effects__preview');
+
 const HASHTAG_ERROR_TEXT = 'Неправильно заполнены хэштеги';
 const MAX_HASHTAG_COUNT = 5; // разрешенное количество хэштегов за раз
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -79,6 +82,12 @@ function openEditor() {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEditorEscKeydown);
+  imgPreview.src = URL.createObjectURL(fileInput.files[0]);
+  imagesEffectsPreview.forEach((image) => {
+    image.style.backgroundImage = `${'url('}${URL.createObjectURL(fileInput.files[0])}${')'}`;
+  });
+
+
   resetScale(); //делаем начальный масштаб 100%
   resetEffects(); //начальный ээфект = none
 }

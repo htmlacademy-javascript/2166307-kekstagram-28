@@ -10,8 +10,6 @@ let thumbnails = [];
 
 setOnRadioContainerListener();
 
-activateFilter();
-
 onPictureContainerClick();
 
 onCloseButtonClick();
@@ -20,6 +18,7 @@ getData()
   .then((photos) => {
     thumbnails = photos;
     renderThumbnails(photos);
+    activateFilter();
   })
   .catch(
     (err) => {
