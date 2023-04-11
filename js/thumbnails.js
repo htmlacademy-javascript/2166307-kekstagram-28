@@ -6,35 +6,25 @@ const DEBOUNCE_TIMEOUT_DELAY = 500; // 500 миллисекунд
 const defaultFilterButton = document.querySelector('#filter-default');
 const randomFilterButton = document.querySelector('#filter-random');
 const discussedFilterButton = document.querySelector('#filter-discussed');
+const allFilterButtons = document.querySelectorAll('.img-filters__button');
 const thumbnailsSection = document.querySelector('.pictures');
 
 //Функция отрисовки миниатюр, второй аргумент - опциональный
-function renderThumbnails(microfotos, qtyOfMicrofotos) {
+function renderThumbnails(microfotos) {
+  deleteRenderedThumbnails();
   const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
   const thumbnailsListFragment = document.createDocumentFragment();
   let i = 0;
-  if (typeof (qtyOfMicrofotos) === 'undefined') {
-    microfotos.forEach((microfoto) => {
-      i++;
-      const thumbnailElement = thumbnailTemplate.cloneNode(true);
-      thumbnailElement.querySelector('.picture__img').src = microfoto.url;
-      thumbnailElement.querySelector('.picture__img').alt = microfoto.description;
-      thumbnailElement.querySelector('.picture__comments').textContent = microfoto.comments.length;
-      thumbnailElement.querySelector('.picture__likes').textContent = microfoto.likes;
-      thumbnailElement.dataset.thumbnailId = i; // установили соответствие между DOMэлементом и элементом массива с данными
-      thumbnailsListFragment.appendChild(thumbnailElement);
-    });
-  } else {
-    for (i = 0; i <= qtyOfMicrofotos - 1; i++) {
-      const thumbnailElement = thumbnailTemplate.cloneNode(true);
-      thumbnailElement.querySelector('.picture__img').src = microfotos[i].url;
-      thumbnailElement.querySelector('.picture__img').alt = microfotos[i].description;
-      thumbnailElement.querySelector('.picture__comments').textContent = microfotos[i].comments.length;
-      thumbnailElement.querySelector('.picture__likes').textContent = microfotos[i].likes;
-      thumbnailElement.dataset.thumbnailId = i; // установили соответствие между DOMэлементом и элементом массива с данными
-      thumbnailsListFragment.appendChild(thumbnailElement);
-    }
-  }
+  microfotos.forEach((microfoto) => {
+    i++;
+    const thumbnailElement = thumbnailTemplate.cloneNode(true);
+    thumbnailElement.querySelector('.picture__img').src = microfoto.url;
+    thumbnailElement.querySelector('.picture__img').alt = microfoto.description;
+    thumbnailElement.querySelector('.picture__comments').textContent = microfoto.comments.length;
+    thumbnailElement.querySelector('.picture__likes').textContent = microfoto.likes;
+    thumbnailElement.dataset.thumbnailId = i; // установили соответствие между DOMэлементом и элементом массива с данными
+    thumbnailsListFragment.appendChild(thumbnailElement);
+  });
   thumbnailsSection.appendChild(thumbnailsListFragment);
 }
 
@@ -61,41 +51,40 @@ function activateFilter() {
 }
 
 //Функция сортировки по-умолчанию
-function sortDefault() {
+function sortDefault(evt) {
   if (!defaultFilterButton.classList.contains('img-filters__button--active')) {
-    deleteRenderedThumbnails();
-    randomFilterButton.classList.remove('img-filters__button--active');
-    discussedFilterButton.classList.remove('img-filters__button--active');
-    defaultFilterButton.classList.add('img-filters__button--active');
+    showFilterButtonStatus(evt.target);
     debounce(renderThumbnails(thumbnails), DEBOUNCE_TIMEOUT_DELAY);
   }
 }
 
 //Функция рандомной сортировки, рисует QTY_OF_RANDOM_THUMBNAILS миниатюр
-function sortRandom() {
+function sortRandom(evt) {
   if (!randomFilterButton.classList.contains('img-filters__button--active')) {
-    deleteRenderedThumbnails();
-    defaultFilterButton.classList.remove('img-filters__button--active');
-    discussedFilterButton.classList.remove('img-filters__button--active');
-    randomFilterButton.classList.add('img-filters__button--active');
+    showFilterButtonStatus(evt.target);
     let randomThumbnails = Array.from(thumbnails);
-    randomThumbnails.sort(() => Math.random() - 0.5);
-    debounce(renderThumbnails(randomThumbnails, QTY_OF_RANDOM_THUMBNAILS),DEBOUNCE_TIMEOUT_DELAY);
+    randomThumbnails = randomThumbnails.sort(() => Math.random() - 0.5).slice(0, QTY_OF_RANDOM_THUMBNAILS) ;
+    debounce(renderThumbnails(randomThumbnails), DEBOUNCE_TIMEOUT_DELAY);
     randomThumbnails = [];
   }
 }
 
 //Функция сортировки по признаку обсуждаемости: выводит на экран по убыванию количества комментариев
-function sortDiscussed() {
+function sortDiscussed(evt) {
   if (!discussedFilterButton.classList.contains('img-filters__button--active')) {
-    deleteRenderedThumbnails();
-    defaultFilterButton.classList.remove('img-filters__button--active');
-    randomFilterButton.classList.remove('img-filters__button--active');
-    discussedFilterButton.classList.add('img-filters__button--active');
+    showFilterButtonStatus(evt.target);
     const discussedThumbnails = Array.from(thumbnails);
     discussedThumbnails.sort((next, prev) => prev.comments.length - next.comments.length);
     debounce(renderThumbnails(discussedThumbnails), DEBOUNCE_TIMEOUT_DELAY);
   }
+}
+
+//Функция установки active-стиля на активную кнопку фильтра
+function showFilterButtonStatus(activeButton) {
+  allFilterButtons.forEach((button) => {
+    button.classList.remove('img-filters__button--active');
+  });
+  activeButton.classList.add('img-filters__button--active');
 }
 
 //Функция очистки экрана от миниатюр
