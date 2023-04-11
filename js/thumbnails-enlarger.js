@@ -33,7 +33,7 @@ function openBigPicture(evt) {
     qtyOfLikes.textContent = targetParent.querySelector('.picture__likes').textContent;
     qtyOfComments.textContent = targetParent.querySelector('.picture__comments').textContent;
     enlargedThumbnailDescription.textContent = evt.target.alt; //берем из миниатюры description
-    comments = thumbnails[targetParent.dataset.thumbnailId - 1].comments;
+    comments = thumbnails[targetParent.dataset.thumbnailId ].comments;
     showMoreBtn.classList.remove('hidden');
     renderComments(comments);
     document.addEventListener('keydown', onEnlargedTumbnailEscKeydown); //вешаем хендлер на закрытие модального по нажатию на  Esc
