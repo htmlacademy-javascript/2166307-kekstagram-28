@@ -14,15 +14,13 @@ function renderThumbnails(microfotos) {
   deleteRenderedThumbnails();
   const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
   const thumbnailsListFragment = document.createDocumentFragment();
-  let i = 0;
   microfotos.forEach((microfoto) => {
-    i++;
     const thumbnailElement = thumbnailTemplate.cloneNode(true);
     thumbnailElement.querySelector('.picture__img').src = microfoto.url;
     thumbnailElement.querySelector('.picture__img').alt = microfoto.description;
     thumbnailElement.querySelector('.picture__comments').textContent = microfoto.comments.length;
     thumbnailElement.querySelector('.picture__likes').textContent = microfoto.likes;
-    thumbnailElement.dataset.thumbnailId = i; // установили соответствие между DOMэлементом и элементом массива с данными
+    thumbnailElement.dataset.thumbnailId = microfoto.id; // установили соответствие между DOMэлементом и элементом массива с данными
     thumbnailsListFragment.appendChild(thumbnailElement);
   });
   thumbnailsSection.appendChild(thumbnailsListFragment);
