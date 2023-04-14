@@ -128,19 +128,15 @@ function setOnRadioContainerListener() {
 //Scale Хендлер на кнопку-минус
 smallerBtn.addEventListener('click', () => {
   const currentScale = parseInt(scaleInput.value, 10);
-  if (currentScale > SCALE_STEP) {
-    const newScale = currentScale - SCALE_STEP;
-    scaleImage(newScale);
-  }
+  const newScale = (currentScale > SCALE_STEP) ? currentScale - SCALE_STEP : SCALE_STEP;
+  scaleImage(newScale);
 });
 
 //Scale Хендлер на кнопку-плюс
 biggerBtn.addEventListener('click', () => {
   const currentScale = parseInt(scaleInput.value, 10);
-  if (currentScale < SCALE_MAX) {
-    const newScale = currentScale + SCALE_STEP;
-    scaleImage(newScale);
-  }
+  const newScale = (currentScale < SCALE_MAX) ? currentScale + SCALE_STEP : SCALE_MAX;
+  scaleImage(newScale);
 });
 
 // Хендлер на бегунок слайдера с функцией, передающей значение слайдера в input с уровнем эффекта
