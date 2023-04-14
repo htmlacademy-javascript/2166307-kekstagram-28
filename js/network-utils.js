@@ -1,4 +1,5 @@
 import { onEditorEscKeydown } from './form-master.js';
+import { isEscapeKey } from './utils.js';
 
 const confirmationTemplate = document.querySelector('#success').content.querySelector('.success');
 const confirmationElement = confirmationTemplate.cloneNode(true);
@@ -28,7 +29,7 @@ function showMistake() {
 const onConfirmationMessageEvent = (evt) => {
   const confirmationMessage = document.querySelector('.success__inner');
   const successButton = confirmationMessage.querySelector('.success__button');
-  if (evt.key === 'Escape' || !confirmationMessage.contains(evt.target) || successButton.contains(evt.target)) {
+  if (isEscapeKey(evt) || !confirmationMessage.contains(evt.target) || successButton.contains(evt.target)) {
     evt.preventDefault();
     confirmationElement.remove();
     document.addEventListener('keydown', onEditorEscKeydown);
@@ -41,7 +42,7 @@ const onConfirmationMessageEvent = (evt) => {
 const onMistakeMessageEvent = (evt) => {
   const mistakeMessage = document.querySelector('.error__inner');
   const mistakeButton = mistakeMessage.querySelector('.error__button');
-  if (evt.key === 'Escape' || !mistakeMessage.contains(evt.target) || mistakeButton.contains(evt.target)) {
+  if (isEscapeKey(evt) || !mistakeMessage.contains(evt.target) || mistakeButton.contains(evt.target)) {
     evt.preventDefault();
     mistakeElement.remove();
     document.addEventListener('keydown', onEditorEscKeydown);

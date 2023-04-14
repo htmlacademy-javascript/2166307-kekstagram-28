@@ -1,4 +1,3 @@
-
 import { setOnRadioContainerListener } from './photo-effects.js';
 import { renderThumbnails, activateFilter } from './thumbnails.js';
 import { onPictureContainerClick, onCloseButtonClick } from './thumbnails-enlarger.js';

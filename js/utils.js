@@ -77,6 +77,8 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+//Функция проверки нажатия на ESC
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export {
   shuffleRange,
@@ -86,5 +88,6 @@ export {
   showAlert,
   blockSubmitButton,
   unblockSubmitButton,
+  isEscapeKey,
   ALERT_SHOW_TIME
 };

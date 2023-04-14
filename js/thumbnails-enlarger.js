@@ -1,4 +1,5 @@
 import { thumbnails } from './main.js';
+import { isEscapeKey } from './utils.js';
 
 const showMoreBtn = document.querySelector('.comments-loader');
 const enlargedThumbnailContainer = document.querySelector('.big-picture');
@@ -13,7 +14,7 @@ let comments = [];
 
 //Функция нажатия на Esc на увеличенной миниатюре
 const onEnlargedTumbnailEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }

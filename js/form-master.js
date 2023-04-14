@@ -1,5 +1,5 @@
 import { resetScale, resetEffects } from './photo-effects.js';
-import { blockSubmitButton, unblockSubmitButton, ALERT_SHOW_TIME } from './utils.js';
+import { blockSubmitButton, unblockSubmitButton, ALERT_SHOW_TIME, isEscapeKey } from './utils.js';
 import { sendData } from './network-utils.js';
 
 const fileInput = document.querySelector('#upload-file');
@@ -52,7 +52,7 @@ pristine.addValidator(
 
 //Функция закрытия эдитора по нажатию Esc
 const onEditorEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     form.reset();
     closeEditor();
@@ -86,8 +86,7 @@ function openEditor() {
   imagesEffectsPreview.forEach((image) => {
     image.style.backgroundImage = `${'url('}${URL.createObjectURL(fileInput.files[0])}${')'}`;
   });
-
-
+  pristine.reset();
   resetScale(); //делаем начальный масштаб 100%
   resetEffects(); //начальный ээфект = none
 }
